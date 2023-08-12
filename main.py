@@ -17,7 +17,7 @@ with open("embeddingData.json", "r", encoding="utf-8") as f:
 def embeddingGen(query):
     headers = {
         "Content-Type": "application/json",
-        "Authorization": "Bearer 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",  # apiKeys[len(apiKeys) - 1],
+        "Authorization": "Bearer " + apiKeys[random.randrange(0, len(apiKeys) - 1)],
     }
     json_data = {
         "input": query,
