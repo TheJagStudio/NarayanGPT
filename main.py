@@ -45,6 +45,50 @@ def strings_ranked_by_relatedness(query, df, top_n=5):
 app = Flask(__name__)
 CORS(app)
 
+messages = [
+    {
+        "role": "system",
+        "content": "You are a whatsapp bot who replys to all my friends in my absence. Keep your ton causal anf friendly. Never ever mention you as an AI.",
+    }
+]
+
+
+def gptConverse(question, key):
+    global messages
+    headers = {
+        "Content-Type": "application/json",
+        "Authorization": "Bearer " + key,
+    }
+    messages.append(
+        {
+            "role": "user",
+            "content": question,
+        }
+    )
+    json_data = {
+        "model": "gpt-3.5-turbo",
+        "messages": messages,
+        "max_tokens": 2048,
+    }
+    response = requests.post(
+        "https://api.openai.com/v1/chat/completions", headers=headers, json=json_data
+    )
+    output = response.json()["choices"][0]["message"]["content"]
+    messages.append(
+        {
+            "role": "assistant",
+            "content": output,
+        }
+    )
+    return output
+
+
+@app.route("/api/gpt", methods=["GET"])
+def gptRes():
+    query = request.args.get("query")
+    response = gptConverse(query, apiKeys[random.randrange(0, len(apiKeys) - 1)])
+    return jsonify({"response": response})
+
 
 @app.route("/", methods=["GET"])
 def index():
