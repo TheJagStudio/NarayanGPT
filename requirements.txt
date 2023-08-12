@@ -2,3 +2,4 @@ Flask
 scipy
 requests
 Flask-Cors
+waitress
