@@ -97,7 +97,7 @@ def index():
 
 @app.route("/api/getAPI", methods=["POST"])
 def getAPI():
-    return jsonify({"API": "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"})
+    return jsonify({"API": apiKeys[random.randrange(0, len(apiKeys) - 1)]})
 
 
 @app.route("/api/getContext", methods=["POST"])
